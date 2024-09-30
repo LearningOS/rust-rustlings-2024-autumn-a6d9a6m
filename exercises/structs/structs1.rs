@@ -8,6 +8,7 @@
 // I AM NOT DONE
 
 struct ColorClassicStruct {
+    let a ;
     // TODO: Something goes here
 }
 
