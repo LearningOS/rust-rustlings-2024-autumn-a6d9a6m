@@ -3,10 +3,22 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
-	//TODO
+use std::cmp::min;
+
+fn sort<T>(array: &mut [T])
+where T: Ord + Copy
+{
+    for i in 0 ..array.len(){
+        let mut mini = i;
+        for j in (i+1)..array.len() {
+            if array[mini] > array[j] { mini = j;}
+        }
+        let num = array[mini];
+        array[mini] = array[i];
+        array[i] = num;
+    }
+
 }
 #[cfg(test)]
 mod tests {

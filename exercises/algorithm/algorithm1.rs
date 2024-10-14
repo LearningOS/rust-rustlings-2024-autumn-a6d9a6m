@@ -2,9 +2,10 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
+use std::os::linux::raw::stat;
 use std::ptr::NonNull;
 use std::vec::*;
 
@@ -70,13 +71,49 @@ impl<T> LinkedList<T> {
         }
     }
 	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+    where T:PartialOrd + Copy + Display
 	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+		let mut node1 = list_a.start;
+        let mut node2 = list_b.start;
+        let mut saw_loop2 = false;
+        let mut list = LinkedList::<T>::new();
+        loop {
+            let value1;
+            let value2;
+            match node1 {
+                None => {
+                    match node2 {
+                        None => { break; },
+                        Some(node2_ptr) => {
+                            unsafe { value2 = (*node2_ptr.as_ptr()).val; }
+                            list.add(value2);
+                            unsafe { node2 = (*node2.unwrap().as_ptr()).next };
+                        }
+                    }
+                },
+                Some(node1_ptr) => {
+                    unsafe { value1 = (*node1_ptr.as_ptr()).val; }
+                    match node2 {
+                        None => {
+                            list.add(value1);
+                            unsafe { node1 = (*node1.unwrap().as_ptr()).next };
+                        },
+                        Some(node2_ptr) => {
+                            unsafe { value2 = (*node2_ptr.as_ptr()).val; }
+                            if value2 <= value1 {
+                                list.add(value2);
+                                unsafe { node2 = (*node2.unwrap().as_ptr()).next };
+                            } else {
+                                list.add(value1);
+                                unsafe { node1 = (*node1.unwrap().as_ptr()).next };
+                            }
+                        }
+                    }
+                }
+
+            }
         }
+        list
 	}
 }
 
