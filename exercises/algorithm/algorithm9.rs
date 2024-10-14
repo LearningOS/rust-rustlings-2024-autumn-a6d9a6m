@@ -2,9 +2,9 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
-use std::cmp::Ord;
+
+use std::cmp::{Ord, Ordering};
 use std::default::Default;
 
 pub struct Heap<T>
@@ -23,7 +23,7 @@ where
     pub fn new(comparator: fn(&T, &T) -> bool) -> Self {
         Self {
             count: 0,
-            items: vec![T::default()],
+            items: Vec::new(),
             comparator,
         }
     }
@@ -36,8 +36,21 @@ where
         self.len() == 0
     }
 
-    pub fn add(&mut self, value: T) {
-        //TODO
+    pub fn add(&mut self, value: T)
+    where T: Copy
+    {
+        let mut i = 0;
+        for num in self.items.clone(){
+            if (self.comparator)(&num, &value) {
+                self.items.insert(i , value);
+                self.count += 1;
+                return;
+            }
+            i = i + 1;
+        }
+        self.count += 1;
+        self.items.push(value);
+
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -83,9 +96,15 @@ where
 {
     type Item = T;
 
-    fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+    fn next(&mut self) -> Option<T>
+    {
+        if self.count == 0{
+            return None;
+        }else{
+            self.count -= 1;
+            self.items.pop()
+        }
+
     }
 }
 
