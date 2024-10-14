@@ -1,6 +1,6 @@
 /*
 	graph
-	This problem requires you to implement a basic graph functio
+	This problem requires you to implement a basic graph function
 */
 // I AM NOT DONE
 
@@ -29,7 +29,14 @@ impl Graph for UndirectedGraph {
         &self.adjacency_table
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
+        self.adjacency_table.insert(edge.0.to_string(),
+                                    vec![(edge.1.to_string(), edge.2)]);
+        self.adjacency_table.insert(edge.1.to_string(),
+                                    vec![(edge.0.to_string(), edge.2)]);
+    }
+    fn contains(&self, node: (&str,&str,i32)) -> bool {
+        println!("{:?}", self.adjacency_table.get(node.0.clone()));
+        self.adjacency_table().get(node.0).is_some()
     }
 }
 pub trait Graph {
@@ -40,12 +47,8 @@ pub trait Graph {
         //TODO
 		true
     }
-    fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
-    }
-    fn contains(&self, node: &str) -> bool {
-        self.adjacency_table().get(node).is_some()
-    }
+    fn add_edge(&mut self, edge: (&str, &str, i32)) ;
+    fn contains(&self, node: (&str,&str,i32)) -> bool;
     fn nodes(&self) -> HashSet<&String> {
         self.adjacency_table().keys().collect()
     }
@@ -78,6 +81,7 @@ mod test_undirected_graph {
             (&String::from("c"), &String::from("b"), 10),
         ];
         for edge in expected_edges.iter() {
+            println!("now we add the edge:{:?}", edge);
             assert_eq!(graph.edges().contains(edge), true);
         }
     }
